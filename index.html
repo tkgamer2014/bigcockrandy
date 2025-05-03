@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>unblk.com</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --accent: #000000;
+      --card-bg: rgba(30, 30, 30, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg);
+      overflow: hidden;
+    }
+
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 255, 156, 0.1);
+      text-align: center;
+      width: 90%;
+      max-width: 420px;
+      margin: auto;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border: none;
+      border-radius: 12px;
+      background-color: #1a1a1a;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    button {
+      background: linear-gradient(135deg, #000000, #000000);
+      color: white;
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    }
+
+    #mainContent {
+      display: none;
+    }
+
+    .countdown {
+      margin-top: 18px;
+      font-size: 15px;
+      color: #bbb;
+    }
+
+    .credits {
+      font-size: 13px;
+      color: #000000;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="particles-js"></div>
+
+  <!-- Passcode Prompt -->
+  <div class="container" id="passcodeContainer">
+    <h1>🔐 Enter Passcode</h1>
+    <input type="password" id="passcodeInput" placeholder="••••••••">
+    <button onclick="checkPasscode()">Unlock</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container" id="mainContent">
+    <h1>🌐 cpy pst any proxy link</h1>
+    <input type="text" id="urlInput" placeholder="example.com">
+    <button onclick="openGameWindow()">Launch</button>
+    <div class="countdown">
+      Reloading in <span id="timer">60</span> seconds...
+    </div>
+    <div class="credits">
+      <p>by 2 kids in 6th grade that dont want to get in troble</p>
+    </div>
+  </div>
+
+  <script>
+    const correctPasscode = "0";
+    let countdownTime = 60;
+    let countdownInterval;
+
+    function checkPasscode() {
+      const pass = document.getElementById("passcodeInput").value.trim();
+      if (pass === correctPasscode) {
+        document.getElementById("passcodeContainer").style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+        startCountdown();
+      } else {
+        alert("❌ Wrong passcode!");
+      }
+    }
+
+    function startCountdown() {
+      document.getElementById("timer").textContent = countdownTime;
+
+      countdownInterval = setInterval(() => {
+        countdownTime--;
+        document.getElementById("timer").textContent = countdownTime;
+
+        if (countdownTime <= 0) {
+          clearInterval(countdownInterval);
+          alert("⏰ Session expired. Reloading...");
+          location.reload();
+        }
+      }, 1000);
+    }
+
+    function openGameWindow() {
+      let url = document.getElementById('urlInput').value.trim();
+      if (!url) {
+        alert("⚠️ Please enter a valid URL.");
+        return;
+      }
+
+      if (!url.startsWith('https://')) {
+        url = 'https://' + url.replace(/^http:\/\//, '');
+      }
+
+      const newWindow = window.open("", "_blank");
+
+      if (!newWindow) {
+        alert("🚫 Popup blocked! Please allow popups.");
+        return;
+      }
+
+      newWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Viewer</title>
+          <style>
+            html, body {
+              margin: 0;
+              padding: 0;
+              height: 100%;
+              background: black;
+              overflow: hidden;
+            }
+            iframe {
+              width: 100%;
+              height: 100%;
+              border: none;
+            }
+          </style>
+        </head>
+        <body>
+          <iframe src="${url}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
+        </body>
+        </html>
+      `);
+      newWindow.document.close();
+    }
+  </script>
+
+  <!-- Particles.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 80 },
+        color: { value: "#000000" },
+        shape: { type: "circle" },
+        opacity: { value: 0.1 },
+        size: { value: 3 },
+        line_linked: {
+          enable: true,
+          distance: 120,
+          color: "#000000",
+          opacity: 0.2,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 1,
+          direction: "none",
+          random: false,
+          straight: false,
+          out_mode: "out"
+        }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "grab" },
+          onclick: { enable: true, mode: "push" }
+        },
+        modes: {
+          grab: { distance: 140, line_linked: { opacity: 0.3 } },
+          push: { particles_nb: 4 }
+        }
+      },
+      retina_detect: true
+    });
+  </script>
+</body>
+</html>
+<h1>im tk i am a student and my brother in middle school helped me make this</h1>
