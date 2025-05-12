@@ -1,248 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>nothing.com</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+  <title>Launch Website</title>
   <style>
-    :root {
-      --bg: #ffffff;
-      --accent: #000000;
-      --card-bg: rgba(30, 30, 30, 0.6);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body, html {
+    html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
-      height: 100%;
-      font-family: 'Outfit', sans-serif;
-      background-color: var(--bg);
-      overflow: hidden;
-    }
-
-    #particles-js {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #f0f0f0; /* Optional: Plain background color */
     }
 
     .container {
-      position: relative;
-      z-index: 1;
-      background: var(--card-bg);
-      backdrop-filter: blur(18px);
-      padding: 40px 30px;
-      border-radius: 20px;
-      box-shadow: 0 8px 24px rgba(0, 255, 156, 0.1);
+      margin-top: 40px;
       text-align: center;
-      width: 90%;
-      max-width: 420px;
-      margin: auto;
-      top: 50%;
-      transform: translateY(-50%);
     }
 
-    h1 {
-      font-size: 26px;
-      margin-bottom: 20px;
+    .input-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 20px 0;
     }
 
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
-      padding: 14px;
-      margin: 12px 0;
-      border: none;
-      border-radius: 12px;
-      background-color: #1a1a1a;
-      color: #fff;
+    input[type="text"] {
+      padding: 10px;
       font-size: 16px;
+      width: 300px;
+      border-radius: 8px;
+      border: 2px solid #00aa00;
+      background-color: #eaffea;
+      color: #006600;
     }
 
     button {
-      background: linear-gradient(135deg, #000000, #000000);
-      color: white;
-      padding: 14px 28px;
-      font-size: 16px;
-      font-weight: bold;
+      padding: 15px 30px;
+      font-size: 18px;
       border: none;
-      border-radius: 12px;
+      border-radius: 8px;
+      background-color: white;
+      color: #ff3300;
+      font-weight: bold;
       cursor: pointer;
-      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, background-color 0.3s ease;
     }
 
     button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+      transform: scale(1.08);
+      background-color: #ffe6e0;
     }
 
-    #mainContent {
-      display: none;
-    }
-
-    .countdown {
-      margin-top: 18px;
-      font-size: 15px;
-      color: #bbb;
-    }
-
-    .credits {
-      font-size: 13px;
-      color: #000000;
-      margin-top: 20px;
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 10px;
     }
   </style>
 </head>
 <body>
 
-  <div id="particles-js"></div>
+  <div class="container">
+    <!-- Button for static proxy site -->
+    <button onclick="openProxy()">Proxy</button>
 
-  <!-- Passcode Prompt -->
-  <div class="container" id="passcodeContainer">
-    <h1>🔐 Enter Passcode</h1>
-    <input type="password" id="passcodeInput" placeholder="••••••••">
-    <button onclick="checkPasscode()">Unlock</button>
-  </div>
-
-  <!-- Main Content -->
-  <div class="container" id="mainContent">
-    <h1>🌐 cpy pst any proxy link</h1>
-    <input type="text" id="urlInput" placeholder="example.com">
-    <button onclick="openGameWindow()">Launch</button>
-    <div class="countdown">
-      Reloading in <span id="timer">60</span> seconds...
-    </div>
-    <div class="credits">
-      <p>by 2 kids in 6th grade that dont want to get in troble</p>
+    <!-- Search bar and button to load URL -->
+    <div class="input-container">
+      <input type="text" id="urlInput" placeholder="Enter a URL (e.g. https://example.com)">
+      <button onclick="loadIframe()">Go</button>
     </div>
   </div>
 
   <script>
-    const correctPasscode = "0";
-    let countdownTime = 60;
-    let countdownInterval;
-
-    function checkPasscode() {
-      const pass = document.getElementById("passcodeInput").value.trim();
-      if (pass === correctPasscode) {
-        document.getElementById("passcodeContainer").style.display = "none";
-        document.getElementById("mainContent").style.display = "block";
-        startCountdown();
-      } else {
-        alert("❌ Wrong passcode!");
-      }
-    }
-
-    function startCountdown() {
-      document.getElementById("timer").textContent = countdownTime;
-
-      countdownInterval = setInterval(() => {
-        countdownTime--;
-        document.getElementById("timer").textContent = countdownTime;
-
-        if (countdownTime <= 0) {
-          clearInterval(countdownInterval);
-          alert("⏰ Session expired. Reloading...");
-          location.reload();
-        }
-      }, 1000);
-    }
-
-    function openGameWindow() {
-      let url = document.getElementById('urlInput').value.trim();
-      if (!url) {
-        alert("⚠️ Please enter a valid URL.");
-        return;
-      }
-
-      if (!url.startsWith('https://')) {
-        url = 'https://' + url.replace(/^http:\/\//, '');
-      }
-
-      const newWindow = window.open("", "_blank");
-
-      if (!newWindow) {
-        alert("🚫 Popup blocked! Please allow popups.");
-        return;
-      }
-
-      newWindow.document.write(`
+    function openProxy() {
+      // Open a new tab
+      const newTab = window.open('', '_blank');
+      
+      // Dynamically create the iframe and inject it into the new tab
+      newTab.document.write(`
         <!DOCTYPE html>
-        <html lang="en">
+        <html>
         <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Viewer</title>
-          <style>
-            html, body {
-              margin: 0;
-              padding: 0;
-              height: 100%;
-              background: black;
-              overflow: hidden;
-            }
-            iframe {
-              width: 100%;
-              height: 100%;
-              border: none;
-            }
-          </style>
+          <title>Proxy Site</title>
         </head>
-        <body>
-          <iframe src="${url}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
+        <body style="margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden;">
+          <iframe src="https://sm.ix.tc/" width="100%" height="100%"></iframe>
         </body>
         </html>
       `);
-      newWindow.document.close();
+      newTab.document.close();  // Close the document stream
+    }
+
+    function loadIframe() {
+      const input = document.getElementById('urlInput').value.trim();
+      if (!input) return;
+
+      // Make sure the URL has the proper protocol
+      const url = input.startsWith('http://') || input.startsWith('https://') ? input : 'https://' + input;
+
+      // Open a new tab with the URL
+      const newTab = window.open('', '_blank');
+      newTab.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Loading...</title>
+        </head>
+        <body style="margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh;">
+          <iframe src="${url}" width="100%" height="100%" style="border: none; border-radius: 10px;"></iframe>
+        </body>
+        </html>
+      `);
+      newTab.document.close();  // Close the document stream
     }
   </script>
 
-  <!-- Particles.js Library -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script>
-    particlesJS('particles-js', {
-      particles: {
-        number: { value: 80 },
-        color: { value: "#000000" },
-        shape: { type: "circle" },
-        opacity: { value: 0.1 },
-        size: { value: 3 },
-        line_linked: {
-          enable: true,
-          distance: 120,
-          color: "#000000",
-          opacity: 0.2,
-          width: 1
-        },
-        move: {
-          enable: true,
-          speed: 1,
-          direction: "none",
-          random: false,
-          straight: false,
-          out_mode: "out"
-        }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "grab" },
-          onclick: { enable: true, mode: "push" }
-        },
-        modes: {
-          grab: { distance: 140, line_linked: { opacity: 0.3 } },
-          push: { particles_nb: 4 }
-        }
-      },
-      retina_detect: true
-    });
-  </script>
 </body>
 </html>
-
